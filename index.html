@@ -27,7 +27,17 @@
     </div>
     <form id="main_form">
       <div id="table">
-        <table id="main_table"></table>
+        <div class="label">
+          <label id="table_label" for="main_table"></label>
+        </div>
+        <table id="main_table">
+          <thead>
+            <th>Title</th>
+            <th>Year</th>
+            <th>Genre</th>
+            <th>Artist(s)</th>
+          </thead>
+        </table>
       </div>
       <select id="main_select">
         <option value="all">All</option>
@@ -39,10 +49,11 @@
     </form>
     <script>
       $.getJSON("data.json", function (obj) {
+        let table = document.getElementById("main_table");
+        document.getElementById('table_label').innerText = obj.band.name
         document.getElementById("serialized").innerHTML = JSON.stringify(obj);
 
         const populateTable = async (genre) => {
-          let table = document.getElementById("main_table");
           let songs;
           if (genre == "all") {
             songs = obj.band.songs;
