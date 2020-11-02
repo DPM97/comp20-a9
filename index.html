@@ -38,48 +38,44 @@
       <button id="filter_btn" type="submit">Filter</button>
     </form>
     <script>
-      let obj;
-      $.getJSON('data.json', function(data) {
-        console.log(data)
-        obj = data;
-      })
+      $.getJSON("data.json", function (obj) {
+        document.getElementById("serialized").innerHTML = JSON.stringify(obj);
 
-      document.getElementById("serialized").innerHTML = JSON.stringify(obj);
+        const populateTable = async (genre) => {
+          let table = document.getElementById("main_table");
+          let songs;
+          if (genre == "all") {
+            songs = obj.band.songs;
+            songs.forEach((e, i) => {
+              let row = table.insertRow(i);
+              row.insertCell(0).innerHTML = e.Title;
+              row.insertCell(1).innerHTML = e.Year;
+              row.insertCell(2).innerHTML = e.Genre;
+              row.insertCell(3).innerHTML = e.Artists.join(", ");
+            });
+          } else {
+            let songs = await obj.band.songs.filter((e) => e.Genre === genre);
+            songs.forEach((e, i) => {
+              let row = table.insertRow(i);
+              row.insertCell(0).innerHTML = e.Title;
+              row.insertCell(1).innerHTML = e.Year;
+              row.insertCell(2).innerHTML = e.Genre;
+              row.insertCell(3).innerHTML = e.Artists.join(", ");
+            });
+          }
+        };
 
-      const populateTable = async (genre) => {
-        let table = document.getElementById("main_table");
-        let songs;
-        if (genre == "all") {
-          songs = obj.band.songs;
-          songs.forEach((e, i) => {
-            let row = table.insertRow(i);
-            row.insertCell(0).innerHTML = e.Title;
-            row.insertCell(1).innerHTML = e.Year;
-            row.insertCell(2).innerHTML = e.Genre;
-            row.insertCell(3).innerHTML = e.Artists.join(", ");
+        document
+          .getElementById("main_form")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+            document.getElementById("main_table").innerHTML = "";
+            populateTable(
+              document.querySelector("#main_select option:checked").value
+            );
           });
-        } else {
-          let songs = await obj.band.songs.filter((e) => e.Genre === genre);
-          songs.forEach((e, i) => {
-            let row = table.insertRow(i);
-            row.insertCell(0).innerHTML = e.Title;
-            row.insertCell(1).innerHTML = e.Year;
-            row.insertCell(2).innerHTML = e.Genre;
-            row.insertCell(3).innerHTML = e.Artists.join(", ");
-          });
-        }
-      };
-
-      document
-        .getElementById("main_form")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          document.getElementById("main_table").innerHTML = "";
-          populateTable(
-            document.querySelector("#main_select option:checked").value
-          );
-        });
-      populateTable("all");
+        populateTable("all");
+      });
     </script>
   </body>
 </html>
