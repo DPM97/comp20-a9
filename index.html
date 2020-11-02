@@ -37,7 +37,7 @@
             <th>Genre</th>
             <th>Artist(s)</th>
           </thead>
-          <tbody></tbody>
+          <tbody id="tbody"></tbody>
         </table>
       </div>
       <select id="main_select">
@@ -50,7 +50,7 @@
     </form>
     <script>
       $.getJSON("data.json", function (obj) {
-        let table = document.getElementById("main_table");
+        let table = document.getElementById("tbody");
         document.getElementById('table_label').innerText = obj.band.name
         document.getElementById("serialized").innerHTML = JSON.stringify(obj);
 
@@ -81,7 +81,7 @@
           .getElementById("main_form")
           .addEventListener("submit", function (e) {
             e.preventDefault();
-            document.getElementById("main_table").innerHTML = "";
+            document.getElementById("tbody").innerHTML = "";
             populateTable(
               document.querySelector("#main_select option:checked").value
             );
