@@ -36,8 +36,9 @@
       <button id='filter_btn' type='submit'>Filter</button>
     </form>
     <script>
-      const obj = fetch('data.json').then(async (resp) => {
-        return await resp.json()
+      let obj
+      fetch('data.json').then(async (resp) => {
+        obj = await resp.json()
       })
 
       document.getElementById('serialized').innerHTML = JSON.stringify(obj)
